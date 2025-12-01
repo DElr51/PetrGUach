@@ -1,0 +1,39 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+{% block title %}Правила — ПетрГУач{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'main/css/rules.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="rules-container">
+    <div class="rules-card">
+        <h1 class="rules-title">Правила использования</h1>
+        <p class="rules-subtitle">ПетрГУач — анонимный имиджборд для студентов ПетрГУ</p>
+
+        <div class="rules-content">
+            <section class="rule-section">
+                <h2 class="section-title">1. Общие положения</h2>
+                <p>ёбаный задрот<br></p>
+
+                    на сервере запрещено:<br>
+                    *использование читов, распрыжек, скриптов и прочих хитростей<br>
+                    *использование спреев-обманок и спреев с эротическим содержанием<br>
+                    *использование уязвимостей карт<br>
+                    *мат в любом проявлении <br>
+                    слово "сука" хоть и литературное, но на сервере расценивается как мат<br>
+                    *оскорбления игроков<br>
+                    *использование нечитаемых ников, ников содежащие мат, цифровых ников<br>
+                    
+                    всё это карается баном            </section>
+
+            
+        <div class="rules-footer">
+            <a href="{% url 'home' %}" class="back-link">← Вернуться на главную</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

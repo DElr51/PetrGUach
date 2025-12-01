@@ -1,0 +1,103 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+{% block title %}{{ thread.title }} — {{ board_title }}{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'main/style.css' %}">
+<link rel="stylesheet" href="{% static 'main/css/thread_detail.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="thread-page">
+    <div class="left-menu">
+        <h1 class="page-title">{{ board_title }}</h1>
+        <a class="home-link" href="{% url 'home' %}">На главную</a>
+        <a class="back-link" href="{% url 'thread_list' board_slug %}">← Назад к списку тредов</a>
+
+        <h3>Общежития</h3>
+        <ul>
+            {% for dorm in dormitories %}
+                <li><a href="{% url 'thread_list' dorm.slug %}">{{ dorm.name }}</a></li>
+            {% endfor %}
+        </ul>
+
+        <h3>Институты</h3>
+        <ul>
+            {% for inst in institutes %}
+                <li><a href="{% url 'thread_list' inst.slug %}">{{ inst.name }}</a></li>
+            {% endfor %}
+        </ul>
+
+        <h3>Учебные корпуса</h3>
+        <ul>
+            {% for building in buildings %}
+                <li><a href="{% url 'thread_list' building.slug %}">{{ building.name }}</a></li>
+            {% endfor %}
+        </ul>
+
+        <h3>Разное</h3>
+        <ul>
+            {% for item in misc_list %}
+                <li><a href="{% url 'thread_list' item.slug %}">{{ item.name }}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="thread-content">
+        <!-- Основной тред -->
+        <div class="thread-card main-thread">
+            <div class="thread-head">
+                <span>{{ thread.author }}</span>
+                <span>{{ thread.date }}</span>
+                <span>{{ thread.weekday }}</span>
+                <span>{{ thread.time }}</span>
+                <span>№{{ thread.id }}</span>
+                <a href="#">Ответить</a>
+                <a href="#">Пожаловаться</a>
+            </div>
+
+            <h2 class="thread-title">{{ thread.title }}</h2>
+
+            <div class="thread-body">
+                {% if thread.image %}
+                    <img class="thread-image" src="{{ thread.image }}" alt="">
+                {% endif %}
+                <p>{{ thread.text }}</p>
+            </div>
+        </div>
+
+        <!-- Ответы на тред -->
+        <div class="replies-section">
+            <h3 class="replies-title">Ответы ({{ replies|length }})</h3>
+            
+            {% for reply in replies %}
+                <div class="thread-card reply-card">
+                    <div class="thread-head">
+                        <span>{{ reply.author }}</span>
+                        <span>{{ reply.date }}</span>
+                        <span>{{ reply.weekday }}</span>
+                        <span>{{ reply.time }}</span>
+                        <span>№{{ reply.id }}</span>
+                        <span class="reply-to">→ <a href="#thread-{{ thread.id }}">№{{ thread.id }}</a></span>
+                        <a href="#">Ответить</a>
+                        <a href="#">Пожаловаться</a>
+                    </div>
+
+                    <div class="thread-body">
+                        {% if reply.image %}
+                            <img class="thread-image" src="{{ reply.image }}" alt="">
+                        {% endif %}
+                        <p>{{ reply.text }}</p>
+                    </div>
+                </div>
+            {% empty %}
+                <div class="no-replies">
+                    <p>Пока нет ответов. Будьте первым!</p>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+

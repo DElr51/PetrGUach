@@ -1,0 +1,73 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+{% block title %}{{ board_title }} — ПетрГУач{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'main/style.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="thread-page">
+
+    
+
+    <div class="left-menu">
+        <h1 class="page-title">{{ board_title }}</h1>
+        <a class="home-link" href="{% url 'home' %}">На главную</a>
+
+        <h3>Общежития</h3>
+        <ul>
+            {% for dorm in dormitories %}
+                <li><a href="{% url 'thread_list' dorm.slug %}">{{ dorm.name }}</a></li>
+            {% endfor %}
+        </ul>
+
+        <h3>Институты</h3>
+        <ul>
+            {% for inst in institutes %}
+                <li><a href="{% url 'thread_list' inst.slug %}">{{ inst.name }}</a></li>
+            {% endfor %}
+        </ul>
+
+        <h3>Учебные корпуса</h3>
+        <ul>
+            {% for building in buildings %}
+                <li><a href="{% url 'thread_list' building.slug %}">{{ building.name }}</a></li>
+            {% endfor %}
+        </ul>
+
+        <h3>Разное</h3>
+        <ul>
+            {% for item in misc_list %}
+                <li><a href="{% url 'thread_list' item.slug %}">{{ item.name }}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="thread-list">
+        {% for t in threads %}
+        <div class="thread-card">
+            <div class="thread-head">
+                <span>{{ t.author }}</span>
+                <span>{{ t.date }}</span>
+                <span>{{ t.weekday }}</span>
+                <span>{{ t.time }}</span>
+                <a href="#">Ответить</a>
+                <a href="#">Пожаловаться</a>
+            </div>
+
+            <h2 class="thread-title"><a href="{% url 'thread_detail' board_slug t.id %}">{{ t.title }}</a></h2>
+
+            <div class="thread-body">
+                {% if t.image %}
+                    <img class="thread-image" src="{{ t.image }}" alt="">
+                {% endif %}
+                <p>{{ t.text }}</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+</div>
+{% endblock %}

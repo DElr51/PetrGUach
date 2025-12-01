@@ -1,0 +1,55 @@
+{% extends "main/base.html" %}
+
+{% block title %}Главная — ПетрГУач{% endblock %}
+
+{% block content %}
+<div class="home-card">
+    <h1 class="home-title">ГЛАВНАЯ СТРАНИЦА</h1>
+    <p class="home-sub">анонимный имиджборд для студентов ПетрГУ</p>
+
+    <div class="boards-grid">
+        <section class="board-column">
+            <h3>Общежития</h3>
+            <ul>
+                {% for item in dormitories %}
+                    <li><a href="{% url 'thread_list' item.slug %}">{{ item.name }}</a></li>
+                {% endfor %}
+            </ul>
+        </section>
+
+        <section class="board-column">
+            <h3>Институты</h3>
+            <ul>
+                {% for item in institutes %}
+                    <li><a href="{% url 'thread_list' item.slug %}">{{ item.name }}</a></li>
+                {% endfor %}
+            </ul>
+        </section>
+
+        <section class="board-column">
+            <h3>Учебные корпуса</h3>
+            <ul>
+                {% for item in buildings %}
+                    <li><a href="{% url 'thread_list' item.slug %}">{{ item.name }}</a></li>
+                {% endfor %}
+            </ul>
+        </section>
+
+        <section class="board-column">
+            <h3>Разное</h3>
+            <ul>
+                {% for item in misc_list %}
+                    <li><a href="{% url 'thread_list' item.slug %}">{{ item.name }}</a></li>
+                {% endfor %}
+            </ul>
+        </section>
+    </div>
+
+    <div class="home-controls">
+        <a class="btn" href="{% url 'rules' %}">Правила</a>
+        <a class="btn" href="{% url 'login' %}">Войти как модератор/администратор</a>
+        <a class="btn" href="{% url 'reports' %}">Жалобы</a>
+        <a class="btn" href="{% url 'settings' %}">Настройки</a>
+    </div>
+</div>
+{% endblock %}

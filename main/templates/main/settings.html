@@ -1,0 +1,78 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+{% block title %}Настройки — ПетрГУач{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'main/css/settings.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="settings-page">
+    <div class="settings-left">
+        <h1 class="page-title">Настройки сайта</h1>
+        <a class="home-link" href="{% url 'home' %}">На главную</a>
+
+        <div class="add-word-section">
+            <h3>Добавить запрещенное слово</h3>
+            <form method="post" action="{% url 'settings' %}" class="add-word-form">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="add">
+                
+                {% if error %}
+                    <div class="error-message">{{ error }}</div>
+                {% endif %}
+                
+                {% if success %}
+                    <div class="success-message">{{ success }}</div>
+                {% endif %}
+
+                <div class="form-group">
+                    <label for="word" class="form-label">Запрещенное слово:</label>
+                    <input 
+                        type="text" 
+                        id="word" 
+                        name="word" 
+                        class="form-input" 
+                        placeholder="Введите слово"
+                        required
+                        autofocus
+                    >
+                </div>
+
+                <button type="submit" class="btn-primary">Добавить</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="settings-right">
+        <div class="banned-words-card">
+            <h2 class="card-title">Запрещенные слова</h2>
+            <p class="card-subtitle">Эти слова будут автоматически цензурироваться на сайте</p>
+
+            {% if banned_words %}
+                <ul class="banned-words-list">
+                    {% for word in banned_words %}
+                        <li class="banned-word-item">
+                            <span class="word-text">{{ word }}</span>
+                            <form method="post" action="{% url 'settings' %}" class="remove-form">
+                                {% csrf_token %}
+                                <input type="hidden" name="action" value="remove">
+                                <input type="hidden" name="word" value="{{ word }}">
+                                <button type="submit" class="remove-btn" title="Удалить">
+                                    ×
+                                </button>
+                            </form>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <div class="empty-state">
+                    <p>Нет запрещенных слов. Добавьте первое слово в форме слева.</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+

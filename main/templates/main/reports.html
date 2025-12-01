@@ -1,0 +1,96 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+{% block title %}Жалобы — ПетрГУач{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'main/css/reports.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="reports-page">
+    <div class="left-menu">
+        <h1 class="page-title">Жалобы</h1>
+        <a class="home-link" href="{% url 'home' %}">На главную</a>
+
+        <h3>Жалобы на треды</h3>
+        <ul class="complaints-list">
+            {% for complaint in thread_complaints %}
+                <li>
+                    <a href="?type=thread&id={{ complaint.id }}" 
+                       class="complaint-link {% if complaint.id == selected_id and selected_type == 'thread' %}active{% endif %}">
+                        #{{ complaint.id }} — {{ complaint.thread_title|truncatewords:5 }}
+                    </a>
+                </li>
+            {% empty %}
+                <li class="empty">Нет жалоб на треды</li>
+            {% endfor %}
+        </ul>
+
+        <h3>Жалобы на сообщения</h3>
+        <ul class="complaints-list">
+            {% for complaint in message_complaints %}
+                <li>
+                    <a href="?type=message&id={{ complaint.id }}" 
+                       class="complaint-link {% if complaint.id == selected_id and selected_type == 'message' %}active{% endif %}">
+                        #{{ complaint.id }} — {{ complaint.thread_title|truncatewords:5 }}
+                    </a>
+                </li>
+            {% empty %}
+                <li class="empty">Нет жалоб на сообщения</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="complaint-details">
+        {% if selected_complaint %}
+            <div class="complaint-card">
+                <div class="complaint-header">
+                    <span class="complaint-id">Жалоба #{{ selected_complaint.id }}</span>
+                    <span class="complaint-type">
+                        {% if selected_complaint.type == 'thread' %}
+                            На тред
+                        {% else %}
+                            На сообщение
+                        {% endif %}
+                    </span>
+                    <span class="complaint-date">{{ selected_complaint.date }}</span>
+                </div>
+
+                <div class="complaint-info">
+                    <h2 class="complaint-thread-title">{{ selected_complaint.thread_title }}</h2>
+                    <p class="complaint-board">Доска: <a href="{% url 'thread_list' selected_complaint.board_slug %}">{{ selected_complaint.board_name }}</a></p>
+                </div>
+
+                <div class="complaint-content">
+                    <h3>Причина жалобы:</h3>
+                    <p>{{ selected_complaint.reason }}</p>
+                </div>
+
+                <div class="complaint-actions">
+                    <a href="{% url 'thread_list' selected_complaint.board_slug %}" class="btn-primary" target="_blank">
+                        Перейти к треду
+                    </a>
+                    <button class="btn-secondary" onclick="resolveComplaint('{{ selected_complaint.type }}', {{ selected_complaint.id }})">
+                        Отметить как рассмотренное
+                    </button>
+                </div>
+            </div>
+        {% else %}
+            <div class="complaint-empty">
+                <p>Выберите жалобу из списка слева для просмотра деталей</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+function resolveComplaint(type, id) {
+    if (confirm('Отметить жалобу #' + id + ' как рассмотренное?')) {
+        // TODO: добавить обработку через AJAX или форму
+        alert('Жалоба #' + id + ' отмечена как рассмотренная');
+    }
+}
+</script>
+{% endblock %}
+
